@@ -1,12 +1,15 @@
+{% load static %}
 <!DOCTYPE html>
 <html>
 <head>
     <title>Rango</title>
+    <link rel="stylesheet" href="{% static 'rango/css/style.css' %}">
 </head>
 
 <body>
     <div>
         <h1>Rango</h1>
+        <img src="{% static 'rango/images/rango.jpg' %}" alt="Rango" />
         <hr>
         <a href="/rango/">Home</a>
         <a href="{% url 'rango:register' %}">Register</a>
