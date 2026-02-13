@@ -1,22 +1,19 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Rango</title>
-</head>
+{% extends 'rango/base.html' %}
 
-<body>
+{% block body_block %}
     <h1>Rango says...</h1>
 
     {% if categories %}
         <ul>
-            {% for category in categories %}
-                <li>
-                    <a href="{% url 'rango:show_category' category.slug %}">{{ category.name }}</a>
-                </li>
-            {% endfor %}
+        {% for category in categories %}
+            <li>
+                <a href="{% url 'rango:show_category' category.slug %}">
+                    {{ category.name }}
+                </a>
+            </li>
+        {% endfor %}
         </ul>
     {% else %}
         <strong>No categories present.</strong>
     {% endif %}
-</body>
-</html>
+{% endblock %}
