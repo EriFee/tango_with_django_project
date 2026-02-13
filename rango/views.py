@@ -6,6 +6,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect
 from rango.forms import UserForm, UserProfileForm
+from datetime import datetime
 
 @login_required
 def add_page(request, category_name_slug):
@@ -33,7 +34,27 @@ def add_page(request, category_name_slug):
 
 def index(request):
     category_list = Category.objects.order_by('-likes')[:5]
-    context_dict = {'categories': category_list}
+
+    visits = request.session.get('visits', 0)
+    last_visit_cookie = request.session.get('last_visit')
+
+    if last_visit_cookie:
+        last_visit_time = datetime.strptime(last_visit_cookie[:-7], "%Y-%m-%d %H:%M:%S")
+
+        if (datetime.now() - last_visit_time).seconds > 0:
+            visits += 1
+            request.session['last_visit'] = str(datetime.now())
+    else:
+        visits = 1
+        request.session['last_visit'] = str(datetime.now())
+
+    request.session['visits'] = visits
+
+    context_dict = {
+        'categories': category_list,
+        'visits': visits
+    }
+
     return render(request, 'rango/index.html', context=context_dict)
 
 def show_category(request, category_name_slug):
